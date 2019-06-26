@@ -49,41 +49,27 @@ const appTabStack = createBottomTabNavigator(
 	{
 		Home:{
 			/** If we remove this navigationOt*/
-			navigationOptions: {
-				tabBarIcon: ({
-					tintColor,
-					focused,
-				}) => (
-					<Ionicons
-					name={focused ? 'ios-home' : 'ios-home'}
-					size={26}
-					style={{ color: tintColor }}
-						/>
-				),
-				tabBarLabel: 'Home',
-					},
 			screen:MainTab,
 			path:'/'
 		},
 		SecondTab:{
-
-			navigationOptions: {
-				tabBarIcon: ({
-					tintColor,
-					focused,
-				}) => (
-					<Ionicons
-					name={focused ? 'ios-settings' : 'ios-settings'}
-					size={26}
-					style={{ color: tintColor }}
-						/>
-				),
-				tabBarLabel: 'Profile',
-					},
 			screen:SecondTab,
 			path:'/'
 		}
-	}
+	},
+	{
+		defaultNavigationOptions: ({ navigation }) => ({
+			tabBarIcon: (focused,horizontal,tintColor) => {
+
+			const { routeName } = navigation.state;
+			console.log('----------routeName-----------');	
+			console.log(routeName);	
+			console.log('----------routeName-----------');	
+			
+			return <Image source = {require('./assets/home.png')} style = {{width:25,height:25}} />;
+				},
+		})
+			}
 );
 
 	const App = createAppContainer(appTabStack);
