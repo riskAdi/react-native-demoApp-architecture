@@ -1,26 +1,41 @@
 import React from 'react';
-import { StyleSheet, Text, View , TextInput } from 'react-native';
-import {createStackNavigator,createAppContainer} from 'react-navigation';
+import { StyleSheet, Text, View , TextInput , Image } from 'react-native';
+import {createStackNavigator,createAppContainer,createBottomTabNavigator} from 'react-navigation';
 import HomeScreen from './screens/HomeScreen';
 import ProfileScreen from './screens/ProfileScreen';
+import Icon from './components/Icon';
 
-const AppStack = createStackNavigator({
-	Home:HomeScreen,
-	Profile:ProfileScreen
-},{
-	initialRouteName: 'Home',
-	defaultNavigationOptions: {
-		headerStyle: {
-			backgroundColor: '#f4511e',
-		},
-		headerTintColor: '#eee',
-		headerTitleStyle: {
-			fontWeight: 'bold',
-		},
-	},
+
+const HomeScreenStack = createStackNavigator({
+	Home:HomeScreen
 });
 
-	const App = createAppContainer(AppStack);
+const ProfileScreenStack = createStackNavigator({
+	Profile:ProfileScreen
+});
+
+const appTabStack = createBottomTabNavigator(
+	{
+		Home:{
+			screen:HomeScreen,
+			path:'Home'
+		},
+		Profile:{
+			screen:ProfileScreen,
+			path:'Profile'
+		}
+	},
+	{
+		defaultNavigationOptions: ({ navigation }) => ({
+			tabBarIcon: () => {
+			const { routeName } = navigation.state;
+			return <Image source = {require('./assets/home.png')} style = {{width:25,height:25}} />;
+				},
+		})
+			}
+);
+
+	const App = createAppContainer(appTabStack);
 	export default App;
 
 
