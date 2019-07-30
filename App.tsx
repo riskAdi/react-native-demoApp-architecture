@@ -1,5 +1,5 @@
 import React from 'react';
-import HomeScreen from './screens/HomeScreen';
+import HomeScreen from './containers/HomeScreen';
 import Example from './components/Example'
 import FlexExample from './components/FlexExample'
 import ScallingExample from './components/ScallingExample';

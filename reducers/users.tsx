@@ -1,43 +1,48 @@
 
 import AppActions from '../config'
+
 export const intialUserState = ({
-	login:{
-		processing:false,
-		error:false,
-		isLogin:false
-	},
-	edit:{},
-	add:{},
-	users:[]
-})
+    isLoggedIn:false,
+    isLoading:false,
+    userData:{},
+    error:undefined
+  })
 
 const users = (state = intialUserState, action) => {
 
-	switch (action) {
+	switch (action.type) {
 
 		case AppActions.LOGIN_SUCCESS:
 
-
-            let successObj = { ...state };
-            successObj.login.processing = false;
-            successObj.login.error = false;
-            successObj.login.isLogin = true;
-            return successObj 
+                return{
+                    ...state,
+                    isLoading:false,
+                    isLoggedIn:true,
+                    userData:action.userData,
+                    error:undefined
+                  } 
 
 		case AppActions.LOGIN_FAILED:
-            let failedObj = { ...state };
-            failedObj.login.processing = false;
-            failedObj.login.error = true;
-            failedObj.login.isLogin = false;
-            return failedObj 
+
+                return{
+                    ...state,
+                    isLoading:false,
+                    isLoggedIn:false,
+                    error:true
+                  }  
         
         case AppActions.LOGIN_STARTED:
-            let startLoginObj = { ...state };
-            startLoginObj.login.processing = true;
-            startLoginObj.login.error = false;
-            startLoginObj.login.isLogin = false;
-            return startLoginObj     
+
+                return{
+                    ...state,
+                    isLoading:true,
+                    isLoggedIn:false
+                  }
 		default:
+                
+                console.log(state);
+                
+
 			return state
 	}
 }
