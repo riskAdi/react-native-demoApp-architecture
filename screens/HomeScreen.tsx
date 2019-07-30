@@ -10,38 +10,46 @@ import Icon from 'react-native-vector-icons/FontAwesome';
 import { Input,Button } from 'react-native-elements';
 import {getLoginState} from '../selectors'
 import {loginAction} from '../actions'
-
-
 const { width, height } = Dimensions.get('window');
 
+interface Props {
+	
+	
+	/* redux props */
 
-interface loginProps {
-
-	username:String;
-	password:String;
-	inputUsername:Input;
-	inputPassword:Input;
+	isLoggedIn: Boolean;
+	userData: Object;
+	validateLogin?(): void;
 }
 
-interface loginState {
-
-	errorMsgUsername:String;
-	errorMsgPassword:String;
+interface State {
+	errorMessageUsername:String;
+	errorMessagePassword:String;
 }
 
+class HomeScreen extends React.Component< Props, State> {
 
-
-class HomeScreen extends React.Component<loginProps,loginState>{
+	state: Readonly<State> = {
+		errorMessageUsername:  'this.props.isLoading.toString()',
+		errorMessagePassword: 'this.props.isLoading.toString()'
+	};
+	
+	static defaultProps: Props = {
+		
+		isLoggedIn:false,
+		userData:{},
+		validateLogin: ()=> { console.log('Not defined yet.') }
+	}
 
 	constructor(props){
 		super(props);
-		this.state={
-			errorMsgUsername:'',
-			errorMsgPassword:'' 
-	}
-	}
 
-	login(){
+		console.log(props);
+		console.log(this.state);
+		
+	}
+	
+	login():void{
 
 		//username.shake(); 
 		console.log(inputUsername);
@@ -71,11 +79,11 @@ class HomeScreen extends React.Component<loginProps,loginState>{
 					alignItems: 'stretch',
 					backgroundColor:'white'
 				}}>
-					<Image style = {{alignSelf:'center',height:72,marginTop:normalize(40)}} source = {require('../assets/logo.png')} />
-					<Title style={{marginTop:normalize(20),textAlign:'center'}}>{this.state.isLoading? 'Loading' : 'None'}</Title>
-					<NormalText style={{marginTop:normalize(15),textAlign:'center'}}></NormalText>
-					<NormalText style={{marginTop:normalize(15),textAlign:'center'}}>Please provide a valid phone number and passoword</NormalText>
-					<Input ref={node => inputUsername = node} containerStyle={{marginTop:normalize(30),borderBottomWidth: 0}} inputStyle = {{textAlign:'center'}}
+				<Image style = {{alignSelf:'center',height:72,marginTop:normalize(40)}} source = {require('../assets/logo.png')} />
+				<Title style={{marginTop:normalize(20),textAlign:'center'}}></Title>
+				<NormalText style={{marginTop:normalize(15),textAlign:'center'}}></NormalText>
+				<NormalText style={{marginTop:normalize(15),textAlign:'center'}}>Please provide a valid phone number and passoword</NormalText>
+				<Input ref={node => inputUsername = node} containerStyle={{marginTop:normalize(30),borderBottomWidth: 0}} inputStyle = {{textAlign:'center'}}
 					placeholder='Your username'
 					leftIcon={
 						<Icon
@@ -85,7 +93,7 @@ class HomeScreen extends React.Component<loginProps,loginState>{
 						/>
 					}
 					shake={this.props.error}
-					errorMessage={this.state.errorMsgUsername}
+					errorMessage=""
 					/>
 
 				<Input ref={node => inputPassword = node} containerStyle={{marginTop:normalize(20)}} inputStyle = {{textAlign:'center'}}
