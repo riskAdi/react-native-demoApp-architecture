@@ -3,7 +3,7 @@ import React from 'react';
 
 import LayoutTester from "react-native-device-screen-switcher";
 import { Title, NormalText,TextInput } from '../styles/style'
-import { ScrollView, SafeAreaView, View, Image, Dimensions, KeyboardAvoidingView, Platform, StyleSheet, Text } from 'react-native';
+import { ScrollView, SafeAreaView, View, Image, Dimensions, KeyboardAvoidingView, Platform, StyleSheet, Text, AppState } from 'react-native';
 import {moderateScale,verticalScale,normalize} from '../components/Scalling'
 import { connect } from 'react-redux'
 import Icon from 'react-native-vector-icons/FontAwesome';
@@ -11,65 +11,68 @@ import { Input,Button } from 'react-native-elements';
 import {getLoginState} from '../selectors'
 import {loginAction} from '../actions'
 const { width, height } = Dimensions.get('window');
+import PropTypes from 'prop-types'
+import Ajv from 'ajv'
+import {loginSchema} from '../schema'
+
+console.log("----loginschema------");
+console.log(loginSchema);
+console.log("----loginschema------");
 
 interface Props {
-	
-	
-	/* redux props */
-
-	isLoggedIn: Boolean;
-	userData: Object;
-	validateLogin?(): void;
+	isLoading?:Boolean;
+	validateLogin():void;
 }
 
 interface State {
-	errorMessageUsername:String;
-	errorMessagePassword:String;
+	errorMessageUsername:string;
+	errorMessagePassword:string;
 }
 
-class HomeScreen extends React.Component< Props, State> {
+class HomeScreen extends React.Component<Props, State> {
+
+	inputUsername:Input;
+	inputPassword:Input;
+	username:String;
+	password:String;
 
 	state: Readonly<State> = {
-		errorMessageUsername:  'this.props.isLoading.toString()',
-		errorMessagePassword: 'this.props.isLoading.toString()'
+		errorMessageUsername:  '',
+		errorMessagePassword: ''
 	};
-	
-	static defaultProps: Props = {
-		
-		isLoggedIn:false,
-		userData:{},
-		validateLogin: ()=> { console.log('Not defined yet.') }
-	}
-
-	constructor(props){
-		super(props);
-
-		console.log(props);
-		console.log(this.state);
-		
-	}
 	
 	login():void{
 
-		//username.shake(); 
-		console.log(inputUsername);
-		//input.errorMessage = "This is error here" 
+		const ajv = new Ajv({ allErrors: true });
+		
+		  const test = ajv.compile(loginSchema);
+		  const isValid = test({username:this.username,password:this.password});
+		  console.log(isValid);
 
-		//errorStyle={{ color: 'red' }}
-		//errorMessage='ENTER A VALID ERROR HERE' 
 
-		//console.log(input);
-		//input.props.errorMessage = "HEre"
+		if (this.username.trim().length < 5 && this.password.length < 5) {
+			
+			this.inputUsername.shake();
+			this.inputPassword.shake();
+			
+			this.setState(previousState => (
+				{ errorMessageUsername: "Username should be atleast 5 character.",
+				  errorMessagePassword: "Password should be atleast 5 character.",
+				}
+			));
+		}else{
 
-		this.setState((state, props) => { 
-			return {errorMsgUsername: 'something wronsdsdg 123'};
-		}); 
+			this.props.validateLogin();
+		}
+
+		//console.log("username");
+		//console.log(this.username);
+		//console.log("password");
+		//console.log(this.password);	
 	}
 
 	render() {
-
 		return (
-
 			<SafeAreaView>
 				<ScrollView style={{height:height}} >
 				<View style={{
@@ -80,10 +83,10 @@ class HomeScreen extends React.Component< Props, State> {
 					backgroundColor:'white'
 				}}>
 				<Image style = {{alignSelf:'center',height:72,marginTop:normalize(40)}} source = {require('../assets/logo.png')} />
-				<Title style={{marginTop:normalize(20),textAlign:'center'}}></Title>
+				<Title style={{marginTop:normalize(20),textAlign:'center'}}>{this.props.isLoading ? 'Loading':'None'}</Title>
 				<NormalText style={{marginTop:normalize(15),textAlign:'center'}}></NormalText>
 				<NormalText style={{marginTop:normalize(15),textAlign:'center'}}>Please provide a valid phone number and passoword</NormalText>
-				<Input ref={node => inputUsername = node} containerStyle={{marginTop:normalize(30),borderBottomWidth: 0}} inputStyle = {{textAlign:'center'}}
+				<Input ref={node => this.inputUsername = node} containerStyle={{marginTop:normalize(30),borderBottomWidth: 0}} inputStyle = {{textAlign:'center'}}
 					placeholder='Your username'
 					leftIcon={
 						<Icon
@@ -92,11 +95,10 @@ class HomeScreen extends React.Component< Props, State> {
 							color='black'
 						/>
 					}
-					shake={this.props.error}
-					errorMessage=""
+					onChangeText = {text=>this.username = text}
+					errorMessage={this.state.errorMessageUsername}
 					/>
-
-				<Input ref={node => inputPassword = node} containerStyle={{marginTop:normalize(20)}} inputStyle = {{textAlign:'center'}}
+				<Input ref={node => this.inputPassword = node} containerStyle={{marginTop:normalize(20)}} inputStyle = {{textAlign:'center'}}
 					placeholder='Your Password'
 					leftIcon={
 					<Icon
@@ -105,6 +107,8 @@ class HomeScreen extends React.Component< Props, State> {
 						color='black'
 					/>
 					}
+					onChangeText = {text=>this.password = text}
+					errorMessage={this.state.errorMessagePassword}
 				/>
 				<Button
 					containerStyle={{marginTop:normalize(40)}}
@@ -136,12 +140,21 @@ class HomeScreen extends React.Component< Props, State> {
    }
 }
 
+HomeScreen.propTypes = {
+	validateLogin: PropTypes.func.isRequired,
+	isLoggedIn: PropTypes.bool.isRequired,
+	isLoading: PropTypes.bool.isRequired,
+	userData: PropTypes.object.isRequired
+}
+  
 const mapStateToProps = state => {
+	
 	return getLoginState(state);
 };
 
 const mapDispatchToProps = dispatch => ({
 	validateLogin: () => dispatch(loginAction.login({"username":"amjad","password":"123abc"}))
 })
+
 
 export default connect(mapStateToProps,mapDispatchToProps)(HomeScreen)
