@@ -12,12 +12,10 @@ import {getLoginState} from '../selectors'
 import {loginAction} from '../actions'
 const { width, height } = Dimensions.get('window');
 import PropTypes from 'prop-types'
-import Ajv from 'ajv'
-import {loginSchema} from '../schema'
+import {validateRequest} from '../utils'
+import {SCHEMA} from '../types'
+import Spinner from 'react-native-loading-spinner-overlay';
 
-console.log("----loginschema------");
-console.log(loginSchema);
-console.log("----loginschema------");
 
 interface Props {
 	isLoading?:Boolean;
@@ -33,45 +31,69 @@ class HomeScreen extends React.Component<Props, State> {
 
 	inputUsername:Input;
 	inputPassword:Input;
-	username:String;
-	password:String;
+	username:string = "";
+	password:string = "";
 
 	state: Readonly<State> = {
-		errorMessageUsername:  '',
+		errorMessageUsername: '',
 		errorMessagePassword: ''
 	};
-	
-	login():void{
 
-		const ajv = new Ajv({ allErrors: true });
+	async login():Promise<void>{
 		
-		  const test = ajv.compile(loginSchema);
-		  const isValid = test({username:this.username,password:this.password});
-		  console.log(isValid);
+		/************** testing to validate runtime check ********** 
+		const obj = {type:SCHEMA.LOGIN,model:{password:this.password,username:this.username}};
+		const response = await validateRequest(obj)
+		console.log("------async------");
+		console.log(response);
+		console.log("------async------");
+		***************  testing to validate runtime ******* */
 
+		if (this.username.trim().length < 5  && this.password.trim().length < 5) {
 
-		if (this.username.trim().length < 5 && this.password.length < 5) {
-			
 			this.inputUsername.shake();
 			this.inputPassword.shake();
-			
+
 			this.setState(previousState => (
-				{ errorMessageUsername: "Username should be atleast 5 character.",
-				  errorMessagePassword: "Password should be atleast 5 character.",
+				{ 	errorMessageUsername: "Username is not valid.",
+					errorMessagePassword: "Password is not valid.",
 				}
 			));
-		}else{
+		
+		}else if (this.username.trim().length < 5){
 
-			this.props.validateLogin();
+			this.setState(previousState => (
+				{ 	errorMessageUsername: "Username is not valid.",
+					errorMessagePassword: "",
+				}
+			));
+			this.inputUsername.shake();
+
+		} else if (this.password.trim().length < 5){
+			this.setState(previousState => (
+				{ 	errorMessageUsername: "",
+					errorMessagePassword: "Password is not valid.",
+				}
+			));
+			this.inputPassword.shake();
+		
+		}else {
+
+			this.setState(previousState => (
+				{ 	errorMessageUsername: "",
+					errorMessagePassword: "",
+				}
+			));
+
+			this.props.validateLogin()
 		}
-
-		//console.log("username");
-		//console.log(this.username);
-		//console.log("password");
-		//console.log(this.password);	
 	}
 
+
 	render() {
+
+		console.log("-------render------------",this.props.isLoading);
+
 		return (
 			<SafeAreaView>
 				<ScrollView style={{height:height}} >
@@ -82,9 +104,12 @@ class HomeScreen extends React.Component<Props, State> {
 					alignItems: 'stretch',
 					backgroundColor:'white'
 				}}>
+				<Spinner
+          			visible={this.props.isLoading}
+          			textContent={'Loading...'}
+          			textStyle={{color:'#fff'}}
+        		/>	
 				<Image style = {{alignSelf:'center',height:72,marginTop:normalize(40)}} source = {require('../assets/logo.png')} />
-				<Title style={{marginTop:normalize(20),textAlign:'center'}}>{this.props.isLoading ? 'Loading':'None'}</Title>
-				<NormalText style={{marginTop:normalize(15),textAlign:'center'}}></NormalText>
 				<NormalText style={{marginTop:normalize(15),textAlign:'center'}}>Please provide a valid phone number and passoword</NormalText>
 				<Input ref={node => this.inputUsername = node} containerStyle={{marginTop:normalize(30),borderBottomWidth: 0}} inputStyle = {{textAlign:'center'}}
 					placeholder='Your username'
@@ -137,7 +162,7 @@ class HomeScreen extends React.Component<Props, State> {
 	</SafeAreaView>
 // </KeyboardAvoidingView>
 	);
-   }
+		}
 }
 
 HomeScreen.propTypes = {
@@ -146,9 +171,9 @@ HomeScreen.propTypes = {
 	isLoading: PropTypes.bool.isRequired,
 	userData: PropTypes.object.isRequired
 }
-  
+
 const mapStateToProps = state => {
-	
+
 	return getLoginState(state);
 };
 

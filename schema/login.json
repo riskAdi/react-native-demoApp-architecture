@@ -10,16 +10,25 @@
     "properties": {
 
         "username":{
+            "dataPath": "username",
             "type": "string",
             "minLength": 5,
             "maxLength": 70,
             "transform":["trim"]
         },
         "password":{
+            "dataPath":"password",
             "type": "string",
             "minLength": 5,
             "maxLength": 20,
             "transform":["trim"]
         }  
-    }
+    },
+    "errorMessages": { 
+        "type": "should be an object",
+        "required": {
+          "username": "username is missing",
+          "password": "password is missing"
+        }
+       }
 }
