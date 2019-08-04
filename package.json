@@ -22,6 +22,7 @@
     "react-native": "https://github.com/expo/react-native/archive/sdk-33.0.0.tar.gz",
     "react-native-device-screen-switcher": "^0.1.0",
     "react-native-elements": "^1.1.0",
+    "react-native-keyboard-aware-scroll-view": "^0.8.0",
     "react-native-layout-tester": "^1.0.6",
     "react-native-loading-spinner-overlay": "^1.0.1",
     "react-native-vector-icons": "^6.5.0",

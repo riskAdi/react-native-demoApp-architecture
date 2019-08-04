@@ -15,7 +15,7 @@ import PropTypes from 'prop-types'
 import {validateRequest} from '../utils'
 import {SCHEMA} from '../types'
 import Spinner from 'react-native-loading-spinner-overlay';
-
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
 
 interface Props {
 	isLoading?:Boolean;
@@ -97,6 +97,7 @@ class HomeScreen extends React.Component<Props, State> {
 		return (
 			<SafeAreaView>
 				<ScrollView style={{height:height}} >
+				<KeyboardAwareScrollView>
 				<View style={{
 					flex: 1,
 					flexDirection: 'column',
@@ -158,6 +159,7 @@ class HomeScreen extends React.Component<Props, State> {
 				/>
 				<View style={{ flex : 1 }} />
 			</View>
+			</KeyboardAwareScrollView>
 		</ScrollView>
 	</SafeAreaView>
 // </KeyboardAvoidingView>
@@ -173,13 +175,11 @@ HomeScreen.propTypes = {
 }
 
 const mapStateToProps = state => {
-
 	return getLoginState(state);
 };
 
 const mapDispatchToProps = dispatch => ({
 	validateLogin: () => dispatch(loginAction.login({"username":"amjad","password":"123abc"}))
 })
-
 
 export default connect(mapStateToProps,mapDispatchToProps)(HomeScreen)
