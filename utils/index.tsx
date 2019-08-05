@@ -1,2 +1,4 @@
 import {validateRequest} from './validate';
-export {validateRequest}
+import normalize from './normalizeFont';
+
+export {validateRequest,normalize}

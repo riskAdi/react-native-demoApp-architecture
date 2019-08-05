@@ -7,15 +7,18 @@ import { ScrollView, SafeAreaView, View, Image, Dimensions, KeyboardAvoidingView
 import {moderateScale,verticalScale,normalize} from '../components/Scalling'
 import { connect } from 'react-redux'
 import Icon from 'react-native-vector-icons/FontAwesome';
-import { Input,Button } from 'react-native-elements';
+import { Input,Button,ThemeProvider } from 'react-native-elements';
 import {getLoginState} from '../selectors'
 import {loginAction} from '../actions'
 const { width, height } = Dimensions.get('window');
-import PropTypes from 'prop-types'
+import PropTypes, { any } from 'prop-types'
 import {validateRequest} from '../utils'
-import {SCHEMA} from '../types'
+import {SCHEMA,LoginForm} from '../types'
 import Spinner from 'react-native-loading-spinner-overlay';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
+import { loginScreenTheme } from '../theme';
+import {validate, ValidationError} from "class-validator";
+
 
 interface Props {
 	isLoading?:Boolean;
@@ -49,44 +52,46 @@ class HomeScreen extends React.Component<Props, State> {
 		console.log("------async------");
 		***************  testing to validate runtime ******* */
 
-		if (this.username.trim().length < 5  && this.password.trim().length < 5) {
+		let loginForm = new LoginForm()
+		loginForm.username = this.username.trim()
+		loginForm.password = this.password.trim()
 
-			this.inputUsername.shake();
-			this.inputPassword.shake();
+		const response: ValidationError[] = await validate(loginForm) 
+		if (response.length > 0) {
+
+			let errorUserName:string = ""
+			let errorPassword:string = ""
+			
+			for(const error of response){
+
+				if (error.property == "username"){
+					const key:string[] = Object.keys(error.constraints)
+					const errorMessage:string = error.constraints[key[0]]
+					errorUserName = errorMessage	
+				}
+				if (error.property == "password"){
+					const key:string[] = Object.keys(error.constraints)
+					const errorMessage:string = error.constraints[key[0]]
+					errorPassword = errorMessage
+				}
+			} 
 
 			this.setState(previousState => (
-				{ 	errorMessageUsername: "Username is not valid.",
-					errorMessagePassword: "Password is not valid.",
+				{ 	errorMessageUsername: errorUserName,
+					errorMessagePassword: errorPassword,
 				}
 			));
-		
-		}else if (this.username.trim().length < 5){
-
-			this.setState(previousState => (
-				{ 	errorMessageUsername: "Username is not valid.",
-					errorMessagePassword: "",
-				}
-			));
-			this.inputUsername.shake();
-
-		} else if (this.password.trim().length < 5){
-			this.setState(previousState => (
-				{ 	errorMessageUsername: "",
-					errorMessagePassword: "Password is not valid.",
-				}
-			));
-			this.inputPassword.shake();
 		
 		}else {
 
+			this.props.validateLogin()
 			this.setState(previousState => (
 				{ 	errorMessageUsername: "",
 					errorMessagePassword: "",
 				}
 			));
-
-			this.props.validateLogin()
 		}
+
 	}
 
 
@@ -109,7 +114,8 @@ class HomeScreen extends React.Component<Props, State> {
           			visible={this.props.isLoading}
           			textContent={'Loading...'}
           			textStyle={{color:'#fff'}}
-        		/>	
+        		/>
+				
 				<Image style = {{alignSelf:'center',height:72,marginTop:normalize(40)}} source = {require('../assets/logo.png')} />
 				<NormalText style={{marginTop:normalize(15),textAlign:'center'}}>Please provide a valid phone number and passoword</NormalText>
 				<Input ref={node => this.inputUsername = node} containerStyle={{marginTop:normalize(30),borderBottomWidth: 0}} inputStyle = {{textAlign:'center'}}
@@ -138,22 +144,22 @@ class HomeScreen extends React.Component<Props, State> {
 				/>
 				<Button
 					containerStyle={{marginTop:normalize(40)}}
-					titleStyle={{fontSize:normalize(18)}}
-					buttonStyle = {{borderRadius:normalize(14),margin:normalize(10),height:normalize(40)}}
+					titleStyle={loginScreenTheme.Button.titleStyle}
+					buttonStyle = {loginScreenTheme.Button.loginButton}
 					type="solid"
 					title="Login"
 					onPress = {()=>{this.login()}} 
 				/>
 				<Button
 					containerStyle={{marginTop:normalize(20)}}
-					titleStyle={{fontSize:normalize(20)}}
-					buttonStyle = {{borderWidth:0}}
+					titleStyle={loginScreenTheme.Button.titleStyle}
+					buttonStyle = {loginScreenTheme.Button.buttonStyle}
 					type="outline"
 					title="Forget Password?"
 				/>
 				<Button
-					buttonStyle = {{borderWidth:0}}
-					titleStyle={{fontSize:normalize(20)}}
+					titleStyle={loginScreenTheme.Button.titleStyle}
+					buttonStyle = {loginScreenTheme.Button.buttonStyle}
 					type="outline"
 					title="Register Account"
 				/>

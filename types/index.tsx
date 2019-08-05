@@ -1,4 +1,5 @@
 
+import { LoginForm } from './loginForm';
 enum SCHEMA {
     LOGIN = 1,
     SIGNUP
@@ -9,4 +10,5 @@ interface requestSchema {
     type:SCHEMA;
 }
 
-export {requestSchema,SCHEMA}
+
+export {requestSchema,SCHEMA,LoginForm}

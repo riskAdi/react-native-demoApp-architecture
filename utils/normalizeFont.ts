@@ -1,21 +1,11 @@
 
 import { PixelRatio, Dimensions } from 'react-native';
-
 const pixelRatio = PixelRatio.get();
 const deviceHeight = Dimensions.get('window').height;
 const deviceWidth = Dimensions.get('window').width;
 
-const { width, height } = Dimensions.get('window');
-const scale = size => width / 350 * size;
-const verticalScale = size => height / 680 * size;
-const moderateScale = (size, factor = 0.5) => {
-    
-    const answer =  size + (scale(size) - size) * factor
-    console.log(answer);
-    return size + (scale(size) - size) * factor
-};
 
-const normalize = size => {
+export default normalize = size => {
   if (pixelRatio >= 2 && pixelRatio < 3) {
     // iphone 5s and older Androids
     if (deviceWidth < 360) {
@@ -84,5 +74,4 @@ const normalize = size => {
 };
 
 
-export {scale, verticalScale, moderateScale,normalize};
 
