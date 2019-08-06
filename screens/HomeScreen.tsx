@@ -101,7 +101,7 @@ class HomeScreen extends React.Component<Props, State> {
 			<SafeAreaView>
 				<ScrollView style={{height:height}} >
 				<KeyboardAwareScrollView>
-				<ContainerScreen>
+				<ContainerScreen addscroll = {true} keyboardScrollAware = {true} >
 				
 				<Spinner
           			visible={this.props.isLoading}

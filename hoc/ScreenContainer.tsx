@@ -1,15 +1,22 @@
 import React, { Props } from 'react';
 import  {View}  from 'react-native';
+import PropTypes from 'prop-types'
 
 const  ScreenContainer = ():any => {
 
-  class Authenticate extends React.Component {
+  interface Props {
+    addscroll:Boolean;
+    keyboardScrollAware:Boolean;
+  }
+
+  class Container extends React.Component<Props> {
     constructor(props) {
       super(props);
     }
 
     render() {
-      const { children ,...otherProps } = this.props;
+      
+      const { children ,addscroll,keyboardScrollAware,...otherProps } = this.props;
       return (<View style={{
         flex: 1,
         flexDirection: 'column',
@@ -22,7 +29,12 @@ const  ScreenContainer = ():any => {
     }
   }
 
-  return Authenticate;
+  Container.propTypes = {
+    addscroll: PropTypes.bool.isRequired,
+    keyboardScrollAware: PropTypes.bool.isRequired
+  }
+
+  return Container;
 }
 
 export default ScreenContainer;
