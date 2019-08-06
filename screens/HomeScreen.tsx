@@ -4,7 +4,7 @@ import React from 'react';
 import LayoutTester from "react-native-device-screen-switcher";
 import { Title, NormalText,TextInput } from '../styles/style'
 import { ScrollView, SafeAreaView, View, Image, Dimensions, KeyboardAvoidingView, Platform, StyleSheet, Text, AppState } from 'react-native';
-import {moderateScale,verticalScale,normalize} from '../components/Scalling'
+import {normalize} from '../components/Scalling'
 import { connect } from 'react-redux'
 import Icon from 'react-native-vector-icons/FontAwesome';
 import { Input,Button,ThemeProvider } from 'react-native-elements';
@@ -13,12 +13,14 @@ import {loginAction} from '../actions'
 const { width, height } = Dimensions.get('window');
 import PropTypes, { any } from 'prop-types'
 import {validateRequest} from '../utils'
-import {SCHEMA,LoginForm} from '../types'
+import {LoginForm} from '../types'
 import Spinner from 'react-native-loading-spinner-overlay';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
 import { loginScreenTheme } from '../theme';
 import {validate, ValidationError} from "class-validator";
+import { ScreenContainer } from '../hoc';
 
+const ContainerScreen = ScreenContainer()
 
 interface Props {
 	isLoading?:Boolean;
@@ -91,25 +93,16 @@ class HomeScreen extends React.Component<Props, State> {
 				}
 			));
 		}
-
 	}
 
-
 	render() {
-
 		console.log("-------render------------",this.props.isLoading);
-
 		return (
 			<SafeAreaView>
 				<ScrollView style={{height:height}} >
 				<KeyboardAwareScrollView>
-				<View style={{
-					flex: 1,
-					flexDirection: 'column',
-					justifyContent: 'center',
-					alignItems: 'stretch',
-					backgroundColor:'white'
-				}}>
+				<ContainerScreen>
+				
 				<Spinner
           			visible={this.props.isLoading}
           			textContent={'Loading...'}
@@ -164,11 +157,10 @@ class HomeScreen extends React.Component<Props, State> {
 					title="Register Account"
 				/>
 				<View style={{ flex : 1 }} />
-			</View>
+			</ContainerScreen>
 			</KeyboardAwareScrollView>
 		</ScrollView>
 	</SafeAreaView>
-// </KeyboardAvoidingView>
 	);
 		}
 }
