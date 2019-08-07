@@ -1,12 +1,12 @@
-import React, { Props } from 'react';
-import  {View}  from 'react-native';
+import React from 'react';
+import  {SafeAreaView,Dimensions,ScrollView}  from 'react-native';
 import PropTypes from 'prop-types'
+const { width, height } = Dimensions.get('window');
 
 const  ScreenContainer = ():any => {
 
   interface Props {
     addscroll:Boolean;
-    keyboardScrollAware:Boolean;
   }
 
   class Container extends React.Component<Props> {
@@ -15,23 +15,29 @@ const  ScreenContainer = ():any => {
     }
 
     render() {
-      
-      const { children ,addscroll,keyboardScrollAware,...otherProps } = this.props;
-      return (<View style={{
-        flex: 1,
-        flexDirection: 'column',
-        justifyContent: 'center',
-        alignItems: 'stretch',
-        backgroundColor:'white'
-      }}>
+
+      const { children,addscroll} = this.props;
+      if (addscroll) {
+       return (
+        <SafeAreaView>
+          <ScrollView style={{height:height}} >
             {children}
-        </View>);
+          </ScrollView >     
+        </SafeAreaView>
+        );
+      
+      }  else {
+        return (
+          <SafeAreaView>
+              {children}
+          </SafeAreaView>
+          );
+      }
     }
   }
 
   Container.propTypes = {
-    addscroll: PropTypes.bool.isRequired,
-    keyboardScrollAware: PropTypes.bool.isRequired
+    addscroll: PropTypes.bool.isRequired
   }
 
   return Container;

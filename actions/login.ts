@@ -8,7 +8,7 @@ const login = ({username,password}) => {
     dispatch({type: AppActions.LOGIN_STARTED});
 		axios.get('https://my-json-server.typicode.com/typicode/demo/posts')
 			.then(res => {
-				dispatch({type: AppActions.LOGIN_SUCCESS});
+				dispatch({type: AppActions.LOGIN_FAILED});
 	        })
 	        .catch(err => {
                 dispatch({type: AppActions.LOGIN_FAILED});

@@ -5,6 +5,14 @@ import Ajv from 'ajv'
 
 export async function validateRequest(options:requestSchema):Promise<[boolean,string[]]>{
 
+    /************** testing to validate runtime check ********** 
+		const obj = {type:SCHEMA.LOGIN,model:{password:this.password,username:this.username}};
+		const response = await validateRequest(obj)
+		console.log("------async------");
+		console.log(response);
+		console.log("------async------");
+    ***************  testing to validate runtime ******* */
+        
     try {
         let validateSchema:any;
         switch (options.type){
