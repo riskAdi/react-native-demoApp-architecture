@@ -1,2 +1,3 @@
 import ScreenContainer from './ScreenContainer';
-export {ScreenContainer}
+import DialogComp from './DialogHOC';
+export {ScreenContainer,DialogComp}

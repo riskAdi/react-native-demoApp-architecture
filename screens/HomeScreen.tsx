@@ -15,10 +15,9 @@ import Spinner from 'react-native-loading-spinner-overlay';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
 import { loginScreenTheme } from '../theme';
 import {validate, ValidationError} from "class-validator";
-import { ScreenContainer } from '../hoc';
-import Dialog, { DialogFooter, DialogButton, DialogContent,DialogTitle,SlideAnimation } from 'react-native-popup-dialog'
-
+import { ScreenContainer,DialogComp } from '../hoc';
 const ContainerScreen = ScreenContainer()
+const DialogComponent = DialogComp()
 
 interface Props {
 	readonly isLoading?:boolean;
@@ -101,6 +100,11 @@ class HomeScreen extends React.Component<Props, State>   {
 		}
 	}
 
+	hideDialog(){
+		
+
+	}
+
 	render() {
 		
 		return (
@@ -168,33 +172,13 @@ class HomeScreen extends React.Component<Props, State>   {
 						type="outline"
 						title="Register Account"
 					/>
-					<Dialog
-						visible={this.state.error}
-						onTouchOutside={() => {
-							this.setState({ error: false });
-						  }}
-						dialogAnimation={new SlideAnimation({
-							slideFrom: 'top',
-						  })}
-						width = {0.8}
-						dialogTitle={<DialogTitle title="Invalid username or password." />}
-    					footer={
-      							<DialogFooter>
-        							<DialogButton
-          								text="CANCEL"
-          								onPress={() => {}}
-        							/>
-        							<DialogButton
-          								text="OK"
-          								onPress={() => {}}
-        							/>
-      							</DialogFooter>
-    							}
-  					>
-    					<DialogContent>
-      						<Text>Please check your credentials and try again!</Text>
-    					</DialogContent>
-  					</Dialog>
+					<DialogComponent 
+						error={this.state.error} 
+						title="Username or Password is invalid."
+						content="You are not entered correct username or password. Please try again!"
+						hideDialog = {()=>{ this.hideDialog(); }}
+					></DialogComponent>
+					
 				</View>
 			</KeyboardAwareScrollView>
 		</ContainerScreen>

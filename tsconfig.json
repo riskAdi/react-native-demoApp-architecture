@@ -6,7 +6,6 @@
     "moduleResolution": "node",
     "allowSyntheticDefaultImports": true,
     "skipLibCheck": true,
-    "target": "es6"
-  },
-  "files": []
+    "target": "es5"
+  }
 }
