@@ -8,13 +8,12 @@ const login = ({username,password}) => {
     dispatch({type: AppActions.LOGIN_STARTED});
 		axios.get('https://my-json-server.typicode.com/typicode/demo/posts')
 			.then(res => {
-				dispatch({type: AppActions.LOGIN_FAILED});
+				dispatch({type: AppActions.LOGIN_SUCCESS});
 	        })
 	        .catch(err => {
                 dispatch({type: AppActions.LOGIN_FAILED});
 	        });
 	};
 }
-// /
 
 export default {login}
