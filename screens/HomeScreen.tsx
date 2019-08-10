@@ -6,7 +6,6 @@ import { View, Image, Text } from 'react-native';
 import {normalize} from '../components/Scalling'
 import { connect } from 'react-redux'
 import Icon from 'react-native-vector-icons/FontAwesome';
-import { Input,Button } from 'react-native-elements';
 import {getLoginState} from '../selectors'
 import {loginAction} from '../actions'
 import PropTypes from 'prop-types'
@@ -15,9 +14,8 @@ import Spinner from 'react-native-loading-spinner-overlay';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
 import { loginScreenTheme } from '../theme';
 import {validate, ValidationError} from "class-validator";
-import { ScreenContainer,DialogComp } from '../hoc';
+import { ScreenContainer,DialogComp,InputHOCComp,ButtonComp } from '../hoc';
 const ContainerScreen = ScreenContainer()
-const DialogComponent = DialogComp()
 
 interface Props {
 	readonly isLoading?:boolean;
@@ -25,16 +23,16 @@ interface Props {
 	readonly error:boolean;
 }
 
-interface State  {
+interface State {
 	errorMessageUsername:string;
 	errorMessagePassword:string;
 	error:boolean;
 }
 
-class HomeScreen extends React.Component<Props, State>   {
+class HomeScreen extends React.Component<Props, State> {
 
-	inputUsername:Input;
-	inputPassword:Input;
+	inputUsername:InputHOCComp;
+	inputPassword:InputHOCComp;
 	username:string = "";
 	password:string = "";
 
@@ -46,19 +44,19 @@ class HomeScreen extends React.Component<Props, State>   {
 
 	async componentWillReceiveProps(newProps:Props){
 
-		await this.delay(100);
+		await this.delay(200);
 		const obj = newProps
 		const error = (obj.error == undefined) ? false : obj.error
 		this.setState(previousState => (
 			{ error: error }
 		));
-	 }
+		}
 
 	delay(ms: number) {
 		return new Promise( resolve => setTimeout(resolve, ms) );
 	} 
 	async login():Promise<void>{
-		
+
 		let loginForm = new LoginForm()
 		loginForm.username = this.username.trim()
 		loginForm.password = this.password.trim()
@@ -68,13 +66,13 @@ class HomeScreen extends React.Component<Props, State>   {
 
 			let errorUserName:string = ""
 			let errorPassword:string = ""
-			
+
 			for(const error of response){
 
 				if (error.property == "username"){
 					const key:string[] = Object.keys(error.constraints)
 					const errorMessage:string = error.constraints[key[0]]
-					errorUserName = errorMessage	
+					errorUserName = errorMessage 
 				}
 				if (error.property == "password"){
 					const key:string[] = Object.keys(error.constraints)
@@ -84,62 +82,60 @@ class HomeScreen extends React.Component<Props, State>   {
 			} 
 
 			this.setState(previousState => (
-				{ 	errorMessageUsername: errorUserName,
+				{ errorMessageUsername: errorUserName,
 					errorMessagePassword: errorPassword,
 				}
 			));
-		
+
 		}else {
 
 			this.props.validateLogin()
 			this.setState(previousState => (
-				{ 	errorMessageUsername: "",
+				{ errorMessageUsername: "",
 					errorMessagePassword: "",
 				}
 			));
 		}
 	}
 
-	hideDialog(){
-		
-
-	}
+	hideDialog(){}
 
 	render() {
-		
+
 		return (
 
-			<ContainerScreen addscroll = {false}  >
+			<ContainerScreen addscroll = {false} >
 				<KeyboardAwareScrollView >
-				
+
 				<View style={{
-              		flex: 1,
-              		flexDirection: 'column',
-              		justifyContent: 'center',
-              		alignItems: 'stretch',
-              		backgroundColor:'white'
-            	}}>
+					flex: 1,
+					flexDirection: 'column',
+					justifyContent: 'center',
+					alignItems: 'stretch',
+					backgroundColor:'white'
+					}}>
 					<Spinner
-          				visible={this.props.isLoading}
-          				textContent={'Loading...'}
-          				textStyle={{color:'#000'}}
-        			/>
-				
+						visible={this.props.isLoading}
+						textContent={'Loading...'}
+						textStyle={{color:'#000'}}
+						/>
+
 					<Image style = {{alignSelf:'center',height:72,marginTop:normalize(40)}} source = {require('../assets/logo.png')} />
 					<NormalText style={{marginTop:normalize(15),textAlign:'center'}}>Please provide a valid phone number and passoword</NormalText>
-					<Input ref={node => this.inputUsername = node} containerStyle={{marginTop:normalize(30),borderBottomWidth: 0}} inputStyle = {{textAlign:'center'}}
+					<InputHOCComp  ref={node => this.inputUsername = node} containerStyle={{marginTop:normalize(30),borderBottomWidth: 0}} inputStyle = {{textAlign:'center'}}
 						placeholder='Your username'
 						leftIcon={
 							<Icon
 								name='user'
 								size={normalize(24)}
-								color='black'
+								color='black' 
 							/>
 						}
+						
 						onChangeText = {text=>this.username = text}
 						errorMessage={this.state.errorMessageUsername}
 					/>
-					<Input ref={node => this.inputPassword = node} containerStyle={{marginTop:normalize(20)}} inputStyle = {{textAlign:'center'}}
+					<InputHOCComp ref={node => this.inputPassword = node} containerStyle={{marginTop:normalize(20)}} inputStyle = {{textAlign:'center'}}
 						placeholder='Your Password'
 						leftIcon={
 							<Icon
@@ -148,10 +144,11 @@ class HomeScreen extends React.Component<Props, State>   {
 								color='black'
 							/>
 						}
+						helloddd="ad"
 						onChangeText = {text=>this.password = text}
 						errorMessage={this.state.errorMessagePassword}
 					/>
-					<Button
+					<ButtonComp
 						containerStyle={{marginTop:normalize(40)}}
 						titleStyle={loginScreenTheme.Button.titleStyle}
 						buttonStyle = {loginScreenTheme.Button.loginButton}
@@ -159,26 +156,26 @@ class HomeScreen extends React.Component<Props, State>   {
 						title="Login"
 						onPress = {()=>{this.login()}} 
 					/>
-					<Button
+					<ButtonComp
 						containerStyle={{marginTop:normalize(20)}}
 						titleStyle={loginScreenTheme.Button.titleStyle}
 						buttonStyle = {loginScreenTheme.Button.buttonStyle}
 						type="outline"
 						title="Forget Password?"
 					/>
-					<Button
+					<ButtonComp
 						titleStyle={loginScreenTheme.Button.titleStyle}
 						buttonStyle = {loginScreenTheme.Button.buttonStyle}
 						type="outline"
 						title="Register Account"
 					/>
-					<DialogComponent 
+					<DialogComp 
 						error={this.state.error} 
 						title="Username or Password is invalid."
 						content="You are not entered correct username or password. Please try again!"
 						hideDialog = {()=>{ this.hideDialog(); }}
-					></DialogComponent>
-					
+					></DialogComp>
+
 				</View>
 			</KeyboardAwareScrollView>
 		</ContainerScreen>

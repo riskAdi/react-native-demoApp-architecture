@@ -3,16 +3,14 @@ import  {SafeAreaView,Dimensions,ScrollView}  from 'react-native';
 import PropTypes from 'prop-types'
 const { width, height } = Dimensions.get('window');
 
-const  ScreenContainer = ():any => {
+const  ScreenContainer = () => {
 
   interface Props {
     addscroll:Boolean;
   }
 
-  class Container extends React.Component<Props> {
-    constructor(props) {
-      super(props);
-    }
+  class Container extends React.Component<Props,{}> {
+    
 
     render() {
 
