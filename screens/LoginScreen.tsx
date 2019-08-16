@@ -1,6 +1,6 @@
 
 import React from 'react';
-import LayoutTester from "react-native-device-screen-switcher";
+//import LayoutTester from "react-native-device-screen-switcher";
 import { NormalText } from '../styles/style'
 import { View, Image, Text } from 'react-native';
 import {normalize} from '../utils'
@@ -11,6 +11,8 @@ import {loginAction} from '../actions'
 import PropTypes from 'prop-types'
 import {LoginForm} from '../types'
 import Spinner from 'react-native-loading-spinner-overlay';
+import { NavigationScreenProp,NavigationState } from 'react-navigation';
+
 //import AsyncStorage from '@react-native-community/async-storage';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
 import { loginScreenTheme } from '../theme';
@@ -24,6 +26,7 @@ interface Props {
 	validateLogin():void;
 	readonly isLoggedIn:boolean;
 	readonly error:boolean;
+	navigation: NavigationScreenProp<NavigationState>;
 }
 
 interface State {
@@ -32,7 +35,11 @@ interface State {
 	error:boolean;
 }
 
-class HomeScreen extends React.Component<Props, State> {
+class LoginScreen extends React.Component<Props, State> {
+
+	static navigationOptions = {
+		header: null
+	};
 
 	inputUsername:InputHOCComp;
 	inputPassword:InputHOCComp;
@@ -123,7 +130,6 @@ class HomeScreen extends React.Component<Props, State> {
 
 			<ContainerScreen addscroll = {false} >
 				<KeyboardAwareScrollView >
-
 				<View style={{
 					flex: 1,
 					flexDirection: 'column',
@@ -185,6 +191,7 @@ class HomeScreen extends React.Component<Props, State> {
 						buttonStyle = {loginScreenTheme.Button.buttonStyle}
 						type="outline"
 						title="Register Account"
+						onPress = {()=> {this.props.navigation.push('SignUp')}}
 					/>
 					<DialogComp 
 						error={this.state.error} 
@@ -200,7 +207,7 @@ class HomeScreen extends React.Component<Props, State> {
 	}
 }
 
-HomeScreen.propTypes = {
+LoginScreen.propTypes = {
 	validateLogin: PropTypes.func.isRequired,
 	isLoggedIn: PropTypes.bool.isRequired,
 	isLoading: PropTypes.bool.isRequired,
@@ -215,4 +222,4 @@ const mapDispatchToProps = dispatch => ({
 	validateLogin: () => dispatch(loginAction.login({"username":"amjad","password":"123abc"}))
 })
 
-export default connect(mapStateToProps,mapDispatchToProps)(HomeScreen)
+export default connect(mapStateToProps,mapDispatchToProps)(LoginScreen)
