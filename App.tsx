@@ -1,9 +1,5 @@
 import React from 'react';
-import HomeScreen from './containers/HomeScreen';
-import Example from './components/Example'
-import FlexExample from './components/FlexExample'
-import ScallingExample from './components/ScallingExample';
-import ViewPortExample from './components/ViewPortExample';
+import HomeScreen from './screens/HomeScreen';
 import rootReducer from './reducers'
 import { createStore, applyMiddleware } from 'redux'
 import { Provider } from 'react-redux'

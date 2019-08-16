@@ -3,5 +3,8 @@ enum AppActions {
     LOGIN_FAILED= 'LOGIN FAILED',
     LOGIN_STARTED = 'LOGIN STARTED'
 }
-
-export default AppActions;
+enum SESSION {
+    TOKEN = 'token',
+    EMAIL = 'email'
+}
+export {AppActions,SESSION};

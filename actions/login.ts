@@ -1,6 +1,9 @@
 
 import axios from 'axios';
-import AppActions from '../config'
+import {AppActions} from '../config'
+
+console.log(AppActions.LOGIN_SUCCESS);
+
 const login = ({username,password}) => {
 
 	return dispatch => { 

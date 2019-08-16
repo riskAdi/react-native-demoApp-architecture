@@ -3,7 +3,7 @@ import React from 'react';
 import LayoutTester from "react-native-device-screen-switcher";
 import { NormalText } from '../styles/style'
 import { View, Image, Text } from 'react-native';
-import {normalize} from '../components/Scalling'
+import {normalize} from '../utils'
 import { connect } from 'react-redux'
 import Icon from 'react-native-vector-icons/FontAwesome';
 import {getLoginState} from '../selectors'
@@ -11,8 +11,10 @@ import {loginAction} from '../actions'
 import PropTypes from 'prop-types'
 import {LoginForm} from '../types'
 import Spinner from 'react-native-loading-spinner-overlay';
+//import AsyncStorage from '@react-native-community/async-storage';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
 import { loginScreenTheme } from '../theme';
+import { SESSION } from '../config';
 import {validate, ValidationError} from "class-validator";
 import { ScreenContainer,DialogComp,InputHOCComp,ButtonComp } from '../hoc';
 const ContainerScreen = ScreenContainer()
@@ -20,6 +22,7 @@ const ContainerScreen = ScreenContainer()
 interface Props {
 	readonly isLoading?:boolean;
 	validateLogin():void;
+	readonly isLoggedIn:boolean;
 	readonly error:boolean;
 }
 
@@ -46,11 +49,25 @@ class HomeScreen extends React.Component<Props, State> {
 
 		await this.delay(200);
 		const obj = newProps
+
 		const error = (obj.error == undefined) ? false : obj.error
 		this.setState(previousState => (
 			{ error: error }
 		));
+
+		if(obj.isLoggedIn){
+
+			/*try {
+				await AsyncStorage.setItem(SESSION.EMAIL, this.username)
+			} catch (e) {
+				
+				console.log('-----------------error-------------------')
+				console.log(e)
+				console.log('-----------------error-------------------')
+			}*/
+
 		}
+	}
 
 	delay(ms: number) {
 		return new Promise( resolve => setTimeout(resolve, ms) );
@@ -122,7 +139,7 @@ class HomeScreen extends React.Component<Props, State> {
 
 					<Image style = {{alignSelf:'center',height:72,marginTop:normalize(40)}} source = {require('../assets/logo.png')} />
 					<NormalText style={{marginTop:normalize(15),textAlign:'center'}}>Please provide a valid phone number and passoword</NormalText>
-					<InputHOCComp  ref={node => this.inputUsername = node} containerStyle={{marginTop:normalize(30),borderBottomWidth: 0}} inputStyle = {{textAlign:'center'}}
+					<InputHOCComp ref={node => this.inputUsername = node} containerStyle={{marginTop:normalize(30),borderBottomWidth: 0}} inputStyle = {{textAlign:'center'}}
 						placeholder='Your username'
 						leftIcon={
 							<Icon
@@ -131,7 +148,7 @@ class HomeScreen extends React.Component<Props, State> {
 								color='black' 
 							/>
 						}
-						
+
 						onChangeText = {text=>this.username = text}
 						errorMessage={this.state.errorMessageUsername}
 					/>

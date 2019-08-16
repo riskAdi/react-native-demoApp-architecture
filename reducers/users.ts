@@ -1,21 +1,21 @@
 
-import AppActions from '../config'
+import {AppActions} from '../config'
 
 export const intialUserState = ({
 	isLoggedIn:false,
 	isLoading:false,
 	userData:{},
 	error:undefined
-	})
+})
 
 const users = (state = intialUserState, action) => {
 
-  /****  Testing purpose
-  console.log("-------------------intialUserState----------------------");
-  console.log(action);
+	/**** Testing purpose
+	console.log("-------------------intialUserState----------------------");
+	console.log(action);
 	console.log(state);
-  console.log("-------------------intialUserState----------------------");
-  */
+		console.log("-------------------intialUserState----------------------");
+		*/
 
 	switch (action.type) {
 
@@ -25,8 +25,8 @@ const users = (state = intialUserState, action) => {
 				...state,
 				isLoading:false,
 				isLoggedIn:true,
-				error:undefined
-				} 
+				error:false
+			} 
 
 		case AppActions.LOGIN_FAILED:
 
@@ -35,14 +35,15 @@ const users = (state = intialUserState, action) => {
 				isLoading:false,
 				isLoggedIn:false,
 				error:true
-				} 
+			} 
 
 		case AppActions.LOGIN_STARTED:
 
 			return{
 				...state,
 				isLoading:true,
-        isLoggedIn:false
+				isLoggedIn:false,
+				error:undefined
 			}
 		default:
 			return state
