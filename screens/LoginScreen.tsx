@@ -146,7 +146,7 @@ class LoginScreen extends React.Component<Props, State> {
 					<Image style = {{alignSelf:'center',height:72,marginTop:normalize(40)}} source = {require('../assets/logo.png')} />
 					<NormalText style={{marginTop:normalize(15),textAlign:'center'}}>Please provide a valid phone number and passoword</NormalText>
 					<InputHOCComp ref={node => this.inputUsername = node} containerStyle={{marginTop:normalize(30),borderBottomWidth: 0}} inputStyle = {{textAlign:'center'}}
-						placeholder='Your username'
+						placeholder='Your phone number'
 						leftIcon={
 							<Icon
 								name='user'
@@ -167,7 +167,6 @@ class LoginScreen extends React.Component<Props, State> {
 								color='black'
 							/>
 						}
-						helloddd="ad"
 						onChangeText = {text=>this.password = text}
 						errorMessage={this.state.errorMessagePassword}
 					/>
@@ -191,7 +190,7 @@ class LoginScreen extends React.Component<Props, State> {
 						buttonStyle = {loginScreenTheme.Button.buttonStyle}
 						type="outline"
 						title="Register Account"
-						onPress = {()=> {this.props.navigation.push('SignUp')}}
+						onPress = {()=> { this.props.navigation.navigate('SignUp')}}
 					/>
 					<DialogComp 
 						error={this.state.error} 
