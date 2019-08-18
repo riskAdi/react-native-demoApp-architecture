@@ -1,46 +1,71 @@
 
 import React from 'react';
-import { View,Text } from 'react-native';
-import Spinner from 'react-native-loading-spinner-overlay';
-import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
-import { ScreenContainer,ButtonComp } from '../hoc';
+import { FlatList, View } from 'react-native';
+import { ListItem,Button } from 'react-native-elements'
+import { ScreenContainer } from '../hoc';
 const ContainerScreen = ScreenContainer()
-import { loginScreenTheme } from '../theme';
-import {normalize} from '../utils'
 
+	class PopupListScreen extends React.Component {
 
-interface Props {
-	readonly isLoading?:boolean;
-	validateLogin():void;
-	readonly isLoggedIn:boolean;
-	readonly error:boolean;
-}
+		list:[object] = [];
 
-interface State {
-	errorMessageUsername:string;
-	errorMessagePassword:string;
-	error:boolean;
-}
+			componentWillMount(){
+			
+				for (let index = 0; index < 50; index++) {
 
-export default class PopupListScreen extends React.Component<Props, State> {
+					if (index%2 == 0){
+					this.list.push({
+						name: 'Amy Farha',
+						avatar_url: 'https://s3.amazonaws.com/uifaces/faces/twitter/ladylexy/128.jpg',
+						subtitle: 'Vice President'
+						});
+					}else{
+						this.list.push({
+							name: 'Chris Jackson',
+							avatar_url: 'https://s3.amazonaws.com/uifaces/faces/twitter/adhamdannaway/128.jpg',
+							subtitle: 'Vice Chairman'
+						}); 
+					}
+				}
+			}
+
+			keyExtractor = (item, index) => index.toString()
+			renderItem = ({ item }) => (
+				<ListItem
+					title={item.name}
+					subtitle={item.subtitle}
+					leftAvatar={{ source: { uri: item.avatar_url } }}
+				/>
+			)
 
 	render() {
+
 		return (
-			
-				
-				<View style={{
-					flex: 1,
-					flexDirection: 'column',
-					justifyContent: 'center',
-					alignItems: 'stretch',
-					backgroundColor:'white'
-					}}>
-					<Text>
-                    Hello world !
-                    </Text>
-				</View>
-		
-	);
+            <ContainerScreen addscroll = {false} >
+            <View style={{
+                flexDirection: 'row',
+                justifyContent: 'flex-end',
+                marginBottom:10
+              }}>
+              
+          <Button
+              title="Cancel"
+              type="outline"
+              style={{marginRight:10}}
+              onPress = { ()=> this.props.navigation.goBack()}
+          />
+              </View>
+           
+			<FlatList
+			keyExtractor={this.keyExtractor}
+			data={this.list}
+			renderItem={this.renderItem}
+			/>
+			</ContainerScreen>
+			)
 	}
 }
+
+
+export default PopupListScreen;
 
