@@ -2,28 +2,33 @@
 import React from 'react';
 import { FlatList, View } from 'react-native';
 import { ListItem,Button } from 'react-native-elements'
-import { ScreenContainer } from '../hoc';
+import { ScreenContainer,InputHOCComp } from '../hoc';
 const ContainerScreen = ScreenContainer()
 
 	class PopupListScreen extends React.Component {
 
 		list:[object] = [];
 
+		renderItemSeparator() {
+			return (
+				<View style={{ height: StyleSheet.hairlineWidth, backgroundColor: 'rgba(0,0,0,0.3)' }} />
+			);
+		}
 			componentWillMount(){
 			
 				for (let index = 0; index < 50; index++) {
 
 					if (index%2 == 0){
 					this.list.push({
-						name: 'Amy Farha',
+						name: 'Pakistan',
 						avatar_url: 'https://s3.amazonaws.com/uifaces/faces/twitter/ladylexy/128.jpg',
-						subtitle: 'Vice President'
+						subtitle: '+92'
 						});
 					}else{
 						this.list.push({
-							name: 'Chris Jackson',
+							name: 'Italy',
 							avatar_url: 'https://s3.amazonaws.com/uifaces/faces/twitter/adhamdannaway/128.jpg',
-							subtitle: 'Vice Chairman'
+							subtitle: '+39'
 						}); 
 					}
 				}
@@ -33,8 +38,11 @@ const ContainerScreen = ScreenContainer()
 			renderItem = ({ item }) => (
 				<ListItem
 					title={item.name}
-					subtitle={item.subtitle}
-					leftAvatar={{ source: { uri: item.avatar_url } }}
+					chevronColor="black"
+					  chevron
+					  containerStyle style = {{marginBottom: 1,
+						borderBottomWidth: 0.5,
+						backgroundColor: "#000000"}}
 				/>
 			)
 
@@ -48,13 +56,17 @@ const ContainerScreen = ScreenContainer()
                 marginBottom:10
               }}>
               
-          <Button
-              title="Cancel"
-              type="outline"
-              style={{marginRight:10}}
-              onPress = { ()=> this.props.navigation.goBack()}
-          />
-              </View>
+          		<Button
+              		title="Cancel"
+              		type="outline"
+              		style={{marginRight:10}}
+              		onPress = { ()=> this.props.navigation.goBack()}
+          		/>
+			</View>
+			
+			<InputHOCComp  containerStyle={{marginTop:normalize(30),borderBottomWidth: 0}} inputStyle = {{textAlign:'center'}}
+						placeholder='Search your country'
+					/>
            
 			<FlatList
 			keyExtractor={this.keyExtractor}
