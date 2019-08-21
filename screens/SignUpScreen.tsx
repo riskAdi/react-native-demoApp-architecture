@@ -41,6 +41,13 @@ class SignUpScreen extends React.Component<Props, State> {
 		error:false
 	};
 
+	dimissCountryList = (country) => {
+
+		console.log("-------country----------");
+		console.log(country);
+		console.log("-------country----------");
+
+	}
 
 	render() {
 
@@ -55,6 +62,7 @@ class SignUpScreen extends React.Component<Props, State> {
 					alignItems: 'stretch',
 					backgroundColor:'white'
 					}}>
+
 					<Spinner
 						visible={this.props.isLoading}
 						textContent={'Loading...'}
@@ -70,7 +78,7 @@ class SignUpScreen extends React.Component<Props, State> {
 						buttonStyle = {loginScreenTheme.Button.loginButton}
 						type="solid"
 						title="SignUp"
-						onPress = {()=>{this.props.navigation.navigate('PopupDialog')}} 
+						onPress = {()=>{this.props.navigation.navigate('PopupDialog',{ callback: this.dimissCountryList })}} 
 					/>
 					
 					<DialogComp 
