@@ -12,6 +12,9 @@ import {LoginForm} from '../types'
 import Spinner from 'react-native-loading-spinner-overlay';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
 import { loginScreenTheme } from '../theme';
+import Icon from 'react-native-vector-icons/FontAwesome';
+import {NavigationScreenProp } from 'react-navigation';
+
 import { ScreenContainer,DialogComp,InputHOCComp,ButtonComp } from '../hoc';
 const ContainerScreen = ScreenContainer()
 
@@ -20,33 +23,40 @@ interface Props {
 	validateLogin():void;
 	readonly isLoggedIn:boolean;
 	readonly error:boolean;
+	navigation: NavigationScreenProp<any,any>;
 }
 
 interface State {
-	errorMessageUsername:string;
-	errorMessagePassword:string;
-	error:boolean;
+	errorMessageCountry:string;
+	errorMessageMobile:string;
+	setCountry:string;
+	numberContent:string;
+	pressSubmit:boolean;
 }
 
 class SignUpScreen extends React.Component<Props, State> {
 
-	inputUsername:InputHOCComp;
-	inputPassword:InputHOCComp;
-	username:string = "";
-	password:string = "";
+	inputCountry:InputHOCComp;
+	inputMobile:InputHOCComp;
+	country:string = "";
+	mobile:string = "";
 
 	state: Readonly<State> = {
-		errorMessageUsername: '',
-		errorMessagePassword: '',
-		error:false
+		errorMessageCountry: '',
+		errorMessageMobile: '',
+		setCountry:'',
+		numberContent:'',
+		pressSubmit:false
 	};
 
 	dimissCountryList = (country) => {
+		this.setState(previousState => ({setCountry:country.dial_code}));
+	}
 
-		console.log("-------country----------");
-		console.log(country);
-		console.log("-------country----------");
+	submitForm = () =>{
 
+		let number = this.state.setCountry + this.mobile 
+		this.setState(previousState=>({pressSubmit:true,numberContent:"Are your number correct "+number+"."}));
 	}
 
 	render() {
@@ -72,20 +82,50 @@ class SignUpScreen extends React.Component<Props, State> {
 					<Image style = {{alignSelf:'center',height:72,marginTop:normalize(40)}} source = {require('../assets/logo.png')} />
 					<NormalText style={{marginTop:normalize(15),textAlign:'center'}}>Please provide a valid phone number and passoword</NormalText>
 					
+					<InputHOCComp  
+						ref={node => this.inputCountry = node}
+						containerStyle={{marginTop:normalize(20)}} inputStyle = {{textAlign:'center'}}
+						placeholder='Your country'
+						onChangeText = {text=>this.country = text}
+						leftIcon={
+							<Icon
+								name='globe'
+								size={normalize(24)}
+								color='black'
+							/>
+						
+						}
+						value= {this.state.setCountry}
+						onFocus={()=>{this.props.navigation.navigate('PopupDialog',{ callback: this.dimissCountryList })}}
+					/>
+					<InputHOCComp  containerStyle={{marginTop:normalize(20)}} inputStyle = {{textAlign:'center'}}
+						placeholder='Your mobile numer'
+						onChangeText = {text=>this.mobile = text}
+						leftIcon={
+							<Icon
+								name='phone'
+								size={normalize(24)}
+								color='black'
+							/>
+						
+						}
+						keyboardType = "number-pad"
+					/>
 					<ButtonComp
 						containerStyle={{marginTop:normalize(40)}}
 						titleStyle={loginScreenTheme.Button.titleStyle}
 						buttonStyle = {loginScreenTheme.Button.loginButton}
 						type="solid"
 						title="SignUp"
-						onPress = {()=>{this.props.navigation.navigate('PopupDialog',{ callback: this.dimissCountryList })}} 
+						onPress = {()=>{this.submitForm()}} 
 					/>
 					
 					<DialogComp 
-						error={this.state.error} 
-						title="Username or Password is invalid."
-						content="You are not entered correct username or password. Please try again!"
-						hideDialog = {()=>{ this.hideDialog(); }}
+						error={this.state.pressSubmit} 
+						title="confirm?"
+						content={this.state.numberContent}
+						hideDialog = {()=>{  }}
+						
 					></DialogComp>
 
 				</View>

@@ -43,7 +43,7 @@ interface State {
 					<DialogFooter>
 						<DialogButton
 							text="CANCEL"
-							onPress={() => {}}
+							onPress={() => { this.setState({ error: false }); }}
 						/>
 						<DialogButton
 							text="OK"

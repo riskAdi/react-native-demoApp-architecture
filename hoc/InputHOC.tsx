@@ -24,7 +24,6 @@ import { Input } from 'react-native-elements';
         rightIconContainerStyle: ViewPropTypes.style,
         inputStyle: object,
         inputComponent: PropTypes.oneOfType([PropTypes.string, PropTypes.func]),
-        // eslint-disable-next-line react/forbid-prop-types
         shake: PropTypes.any,
         errorProps: PropTypes.object,
         errorStyle: object,

@@ -1,5 +1,7 @@
 import PropTypes from 'prop-types'
 import { LoginForm } from './loginForm';
+import { SignupForm } from './signupForm';
+
 enum SCHEMA {
     LOGIN = 1,
     SIGNUP
@@ -19,4 +21,4 @@ const NodeType =   PropTypes.oneOfType([
   
 
 
-export {requestSchema,SCHEMA,LoginForm,NodeType}
+export {requestSchema,SCHEMA,LoginForm,SignupForm,NodeType}

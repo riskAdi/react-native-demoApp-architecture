@@ -10,7 +10,7 @@ import { Provider } from 'react-redux'
 import thunk from 'redux-thunk'
 import { createLogger } from 'redux-logger'
 import { createAppContainer, createStackNavigator,createSwitchNavigator } from 'react-navigation';
-import {  zoomIn, zoomOut, fromRight } from 'react-navigation-transitions'
+import { zoomIn, zoomOut, fromRight } from 'react-navigation-transitions'
 
 
 const middleware = [ thunk ]

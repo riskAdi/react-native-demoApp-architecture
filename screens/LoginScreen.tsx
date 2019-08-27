@@ -3,7 +3,7 @@ import React from 'react';
 //import LayoutTester from "react-native-device-screen-switcher";
 import { NormalText } from '../styles/style'
 import { View, Image, Text } from 'react-native';
-import {normalize} from '../utils'
+import {normalize,validateForm} from '../utils'
 import { connect } from 'react-redux'
 import Icon from 'react-native-vector-icons/FontAwesome';
 import {getLoginState} from '../selectors'
@@ -17,7 +17,6 @@ import { NavigationScreenProp,NavigationState } from 'react-navigation';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
 import { loginScreenTheme } from '../theme';
 import { SESSION } from '../config';
-import {validate, ValidationError} from "class-validator";
 import { ScreenContainer,DialogComp,InputHOCComp,ButtonComp } from '../hoc';
 const ContainerScreen = ScreenContainer()
 
@@ -81,43 +80,36 @@ class LoginScreen extends React.Component<Props, State> {
 	} 
 	async login():Promise<void>{
 
+		let errors:any= new Object()
+		errors.errorMessageUsername = "";
+		errors.errorMessagePassword = "";
+
 		let loginForm = new LoginForm()
 		loginForm.username = this.username.trim()
 		loginForm.password = this.password.trim()
 
-		const response: ValidationError[] = await validate(loginForm) 
-		if (response.length > 0) {
+		const validateResp:[boolean,[any]?] = await validateForm(loginForm);
+		if(validateResp[0] == true){
 
-			let errorUserName:string = ""
-			let errorPassword:string = ""
+			for(const error of validateResp[1]){
 
-			for(const error of response){
-
-				if (error.property == "username"){
-					const key:string[] = Object.keys(error.constraints)
-					const errorMessage:string = error.constraints[key[0]]
-					errorUserName = errorMessage 
+				if (error.key == "username"){
+					errors.errorMessageUsername = error.msg;
 				}
-				if (error.property == "password"){
-					const key:string[] = Object.keys(error.constraints)
-					const errorMessage:string = error.constraints[key[0]]
-					errorPassword = errorMessage
+				if (error.key == "password"){
+					errors.errorMessagePassword = error.msg;
 				}
-			} 
+			}
 
 			this.setState(previousState => (
-				{ errorMessageUsername: errorUserName,
-					errorMessagePassword: errorPassword,
-				}
+				errors
 			));
 
-		}else {
+		}else{
 
 			this.props.validateLogin()
 			this.setState(previousState => (
-				{ errorMessageUsername: "",
-					errorMessagePassword: "",
-				}
+				errors
 			));
 		}
 	}
@@ -154,7 +146,7 @@ class LoginScreen extends React.Component<Props, State> {
 								color='black' 
 							/>
 						}
-
+						autoCorrect={false} 
 						onChangeText = {text=>this.username = text}
 						errorMessage={this.state.errorMessageUsername}
 					/>
@@ -166,7 +158,9 @@ class LoginScreen extends React.Component<Props, State> {
 								size={normalize(24)}
 								color='black'
 							/>
+						
 						}
+						autoCorrect={false} 
 						onChangeText = {text=>this.password = text}
 						errorMessage={this.state.errorMessagePassword}
 					/>
