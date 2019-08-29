@@ -149,6 +149,7 @@ class LoginScreen extends React.Component<Props, State> {
 						autoCorrect={false} 
 						onChangeText = {text=>this.username = text}
 						errorMessage={this.state.errorMessageUsername}
+						keyboardType = "number-pad"
 					/>
 					<InputHOCComp ref={node => this.inputPassword = node} containerStyle={{marginTop:normalize(20)}} inputStyle = {{textAlign:'center'}}
 						placeholder='Your Password'

@@ -1,14 +1,14 @@
 
-import {LoginActions} from '../config'
+import {RegisterActions} from '../config'
 
-export const intialUserState = ({
-	isLoggedIn:false,
+export const intialSignupState = ({
+	
 	isLoading:false,
 	userData:{},
 	error:undefined
 })
 
-const users = (state = intialUserState, action) => {
+const register = (state = intialSignupState, action) => {
 
 	/**** Testing purpose
 	console.log("-------------------intialUserState----------------------");
@@ -19,7 +19,7 @@ const users = (state = intialUserState, action) => {
 
 	switch (action.type) {
 
-		case LoginActions.LOGIN_SUCCESS:
+		case RegisterActions.REGISTER_SUCCESS:
 
 			return{
 				...state,
@@ -28,7 +28,7 @@ const users = (state = intialUserState, action) => {
 				error:false
 			} 
 
-		case LoginActions.LOGIN_FAILED:
+		case RegisterActions.REGISTER_FAILED:
 
 			return{
 				...state,
@@ -37,7 +37,7 @@ const users = (state = intialUserState, action) => {
 				error:true
 			} 
 
-		case LoginActions.LOGIN_STARTED:
+		case RegisterActions.REGISTER_STARTED:
 
 			return{
 				...state,
@@ -50,5 +50,5 @@ const users = (state = intialUserState, action) => {
 	}
 }
 
-	export default users
+	export default register
 

@@ -1,3 +1,4 @@
 
 import {getLoginState} from './login'
-export  { getLoginState}
+import {getRegisterState} from './register'
+export  { getLoginState,getRegisterState}

@@ -9,6 +9,7 @@ interface Props {
 	readonly content:string;
 	readonly error:boolean;
 	hideDialog:Function;
+	okHandler:Function;
 }
 
 interface State {
@@ -47,13 +48,13 @@ interface State {
 						/>
 						<DialogButton
 							text="OK"
-							onPress={() => {}}
+							onPress={() => {  this.setState({ error: false }); this.props.okHandler()}}
 						/>
 					</DialogFooter>
 					}
 				width = {0.8}
 				onTouchOutside={() => {
-					this.setState({ error: false });
+					this.setState({ error: false })
 					this.props.hideDialog();
 				}}
 				>
@@ -69,7 +70,8 @@ interface State {
 		error: PropTypes.bool.isRequired,
 		title: PropTypes.string.isRequired,
 		content: PropTypes.string.isRequired,
-		hideDialog: PropTypes.func.isRequired
+		hideDialog: PropTypes.func.isRequired,
+		okHandler:PropTypes.func
 	}
 
 

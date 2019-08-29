@@ -9,4 +9,8 @@ export class SignupForm {
     @MinLength(5)
     @MaxLength(20)
     password: string;
+
+    @MinLength(2)
+    @MaxLength(5)
+    country: string;
 }

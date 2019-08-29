@@ -3,12 +3,12 @@ import React from 'react';
 //import LayoutTester from "react-native-device-screen-switcher";
 import { NormalText } from '../styles/style'
 import { View, Image, Text } from 'react-native';
-import {normalize} from '../utils'
+import {normalize,validateForm} from '../utils'
 import { connect } from 'react-redux'
-import {getLoginState} from '../selectors'
+import {getRegisterState} from '../selectors'
 import {loginAction} from '../actions'
 import PropTypes from 'prop-types'
-import {LoginForm} from '../types'
+import {SignupForm} from '../types'
 import Spinner from 'react-native-loading-spinner-overlay';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
 import { loginScreenTheme } from '../theme';
@@ -27,8 +27,9 @@ interface Props {
 }
 
 interface State {
-	errorMessageCountry:string;
-	errorMessageMobile:string;
+	country:string;
+	mobile:string;
+	password:string;
 	setCountry:string;
 	numberContent:string;
 	pressSubmit:boolean;
@@ -40,10 +41,12 @@ class SignUpScreen extends React.Component<Props, State> {
 	inputMobile:InputHOCComp;
 	country:string = "";
 	mobile:string = "";
+	password:string="";
 
 	state: Readonly<State> = {
-		errorMessageCountry: '',
-		errorMessageMobile: '',
+		country: '',
+		mobile: '',
+		password:'',
 		setCountry:'',
 		numberContent:'',
 		pressSubmit:false
@@ -53,10 +56,34 @@ class SignUpScreen extends React.Component<Props, State> {
 		this.setState(previousState => ({setCountry:country.dial_code}));
 	}
 
-	submitForm = () =>{
+	async submitForm(){
 
-		let number = this.state.setCountry + this.mobile 
-		this.setState(previousState=>({pressSubmit:true,numberContent:"Are your number correct "+number+"."}));
+		let cloneSignup = new SignupForm()
+		let signupForm = new SignupForm()
+		signupForm.mobile = this.mobile.trim()
+		signupForm.password = this.password.trim()
+		signupForm.country = this.state.setCountry
+		const validateResp:[boolean,[any]?] = await validateForm(signupForm);
+		if(validateResp[0] == true){
+
+			for(const error of validateResp[1]){
+				cloneSignup[error.key] = error.msg;
+			}
+
+			console.log(cloneSignup);
+			this.setState(previousState => (
+				cloneSignup
+			));
+
+		}else{
+			let number = this.state.setCountry + this.mobile 
+			this.setState(previousState=>({...cloneSignup,pressSubmit:true,numberContent:"Are your number correct "+number+"."}));
+		}
+	}
+
+	dialogOkPress(){
+
+		console.log("press")
 	}
 
 	render() {
@@ -87,6 +114,7 @@ class SignUpScreen extends React.Component<Props, State> {
 						containerStyle={{marginTop:normalize(20)}} inputStyle = {{textAlign:'center'}}
 						placeholder='Your country'
 						onChangeText = {text=>this.country = text}
+						errorMessage={this.state.country}
 						leftIcon={
 							<Icon
 								name='globe'
@@ -100,6 +128,7 @@ class SignUpScreen extends React.Component<Props, State> {
 					/>
 					<InputHOCComp  containerStyle={{marginTop:normalize(20)}} inputStyle = {{textAlign:'center'}}
 						placeholder='Your mobile numer'
+						errorMessage={this.state.mobile}
 						onChangeText = {text=>this.mobile = text}
 						leftIcon={
 							<Icon
@@ -111,6 +140,19 @@ class SignUpScreen extends React.Component<Props, State> {
 						}
 						keyboardType = "number-pad"
 					/>
+					<InputHOCComp  containerStyle={{marginTop:normalize(20)}} inputStyle = {{textAlign:'center'}}
+						placeholder='Your Password'
+						leftIcon={
+							<Icon
+								name='lock'
+								size={normalize(24)}
+								color='black'
+							/>
+						}
+						errorMessage={this.state.password}
+						autoCorrect={false} 
+						onChangeText = {text=>this.password = text}
+					/>	
 					<ButtonComp
 						containerStyle={{marginTop:normalize(40)}}
 						titleStyle={loginScreenTheme.Button.titleStyle}
@@ -124,6 +166,7 @@ class SignUpScreen extends React.Component<Props, State> {
 						error={this.state.pressSubmit} 
 						title="confirm?"
 						content={this.state.numberContent}
+						okHandler = {()=>{ this.dialogOkPress()  }}
 						hideDialog = {()=>{  }}
 						
 					></DialogComp>
@@ -143,7 +186,7 @@ SignUpScreen.propTypes = {
 }
 
 const mapStateToProps = state => {
-	return getLoginState(state);
+	return getRegisterState(state)
 };
 
 const mapDispatchToProps = dispatch => ({

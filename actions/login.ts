@@ -1,20 +1,20 @@
 
 import axios from 'axios';
-import {AppActions} from '../config'
+import {LoginActions} from '../config'
 
-console.log(AppActions.LOGIN_SUCCESS);
+console.log(LoginActions.LOGIN_SUCCESS);
 
 const login = ({username,password}) => {
 
 	return dispatch => { 
 
-    dispatch({type: AppActions.LOGIN_STARTED});
+    dispatch({type: LoginActions.LOGIN_STARTED});
 		axios.get('https://my-json-server.typicode.com/typicode/demo/posts')
 			.then(res => {
-				dispatch({type: AppActions.LOGIN_SUCCESS});
+				dispatch({type: LoginActions.LOGIN_SUCCESS});
 	        })
 	        .catch(err => {
-                dispatch({type: AppActions.LOGIN_FAILED});
+                dispatch({type: LoginActions.LOGIN_FAILED});
 	        });
 	};
 }
