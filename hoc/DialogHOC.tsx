@@ -48,7 +48,7 @@ interface State {
 						/>
 						<DialogButton
 							text="OK"
-							onPress={() => {  this.setState({ error: false }); this.props.okHandler()}}
+							onPress={() => {  this.setState({ error: false },()=> { if(this.props.okHandler !== undefined){ this.props.okHandler();}}) }}
 						/>
 					</DialogFooter>
 					}

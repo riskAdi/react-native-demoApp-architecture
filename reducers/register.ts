@@ -11,11 +11,11 @@ export const intialSignupState = ({
 const register = (state = intialSignupState, action) => {
 
 	/**** Testing purpose
-	console.log("-------------------intialUserState----------------------");
+	console.log("-------------------intialregisterState----------------------");
 	console.log(action);
 	console.log(state);
-		console.log("-------------------intialUserState----------------------");
-		*/
+	console.log("-------------------intialregisterState----------------------");
+	*/
 
 	switch (action.type) {
 
@@ -24,7 +24,6 @@ const register = (state = intialSignupState, action) => {
 			return{
 				...state,
 				isLoading:false,
-				isLoggedIn:true,
 				error:false
 			} 
 
@@ -33,8 +32,7 @@ const register = (state = intialSignupState, action) => {
 			return{
 				...state,
 				isLoading:false,
-				isLoggedIn:false,
-				error:true
+				error:false
 			} 
 
 		case RegisterActions.REGISTER_STARTED:
@@ -42,7 +40,6 @@ const register = (state = intialSignupState, action) => {
 			return{
 				...state,
 				isLoading:true,
-				isLoggedIn:false,
 				error:undefined
 			}
 		default:

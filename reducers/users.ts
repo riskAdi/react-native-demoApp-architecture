@@ -11,10 +11,10 @@ export const intialUserState = ({
 const users = (state = intialUserState, action) => {
 
 	/**** Testing purpose
-	console.log("-------------------intialUserState----------------------");
+	console.log("-------------------intialLoginState----------------------");
 	console.log(action);
 	console.log(state);
-		console.log("-------------------intialUserState----------------------");
+		console.log("-------------------intialLoginState----------------------");
 		*/
 
 	switch (action.type) {

@@ -6,7 +6,7 @@ import { View, Image, Text } from 'react-native';
 import {normalize,validateForm} from '../utils'
 import { connect } from 'react-redux'
 import {getRegisterState} from '../selectors'
-import {loginAction} from '../actions'
+import {regiserAction} from '../actions'
 import PropTypes from 'prop-types'
 import {SignupForm} from '../types'
 import Spinner from 'react-native-loading-spinner-overlay';
@@ -16,11 +16,12 @@ import Icon from 'react-native-vector-icons/FontAwesome';
 import {NavigationScreenProp } from 'react-navigation';
 
 import { ScreenContainer,DialogComp,InputHOCComp,ButtonComp } from '../hoc';
+import { async } from '../utils/validate';
 const ContainerScreen = ScreenContainer()
 
 interface Props {
 	readonly isLoading?:boolean;
-	validateLogin():void;
+	validateSignup():void;
 	readonly isLoggedIn:boolean;
 	readonly error:boolean;
 	navigation: NavigationScreenProp<any,any>;
@@ -33,6 +34,7 @@ interface State {
 	setCountry:string;
 	numberContent:string;
 	pressSubmit:boolean;
+	error:boolean;
 }
 
 class SignUpScreen extends React.Component<Props, State> {
@@ -49,20 +51,38 @@ class SignUpScreen extends React.Component<Props, State> {
 		password:'',
 		setCountry:'',
 		numberContent:'',
-		pressSubmit:false
+		pressSubmit:false,
+		error:false
 	};
 
 	dimissCountryList = (country) => {
 		this.setState(previousState => ({setCountry:country.dial_code}));
 	}
 
+	async componentWillReceiveProps(newProps:Props){
+
+		await this.delay(200);
+		const obj = newProps
+		const error = (obj.error == undefined) ? false : obj.error
+		this.setState({ error: error,pressSubmit:false }, async () => {  await this.makeDefaultState()});
+	}
+
+	delay(ms: number) {
+		return new Promise( resolve => setTimeout(resolve, ms) );
+	} 
+
+	async makeDefaultState(){
+
+		console.log("-------------------makeDefaultState----------------------");
+		this.setState({ error: false,pressSubmit:false });
+	}
 	async submitForm(){
 
 		let cloneSignup = new SignupForm()
 		let signupForm = new SignupForm()
 		signupForm.mobile = this.mobile.trim()
 		signupForm.password = this.password.trim()
-		signupForm.country = this.state.setCountry
+		signupForm.country = this.state.setCountry.trim()
 		const validateResp:[boolean,[any]?] = await validateForm(signupForm);
 		if(validateResp[0] == true){
 
@@ -70,20 +90,20 @@ class SignUpScreen extends React.Component<Props, State> {
 				cloneSignup[error.key] = error.msg;
 			}
 
-			console.log(cloneSignup);
+			console.log(validateResp[1]);
 			this.setState(previousState => (
 				cloneSignup
 			));
 
 		}else{
+
 			let number = this.state.setCountry + this.mobile 
 			this.setState(previousState=>({...cloneSignup,pressSubmit:true,numberContent:"Are your number correct "+number+"."}));
 		}
 	}
 
 	dialogOkPress(){
-
-		console.log("press")
+		this.setState({ pressSubmit: false }, () => {this.props.validateSignup()});
 	}
 
 	render() {
@@ -171,6 +191,14 @@ class SignUpScreen extends React.Component<Props, State> {
 						
 					></DialogComp>
 
+					<DialogComp 
+						error={this.state.error} 
+						title="Error"
+						content="You are not able to register. Try agin"
+						hideDialog = {()=>{  }}
+						
+					></DialogComp>
+
 				</View>
 			</KeyboardAwareScrollView>
 		</ContainerScreen>
@@ -179,8 +207,7 @@ class SignUpScreen extends React.Component<Props, State> {
 }
 
 SignUpScreen.propTypes = {
-	validateLogin: PropTypes.func.isRequired,
-	isLoggedIn: PropTypes.bool.isRequired,
+	validateSignup: PropTypes.func.isRequired,
 	isLoading: PropTypes.bool.isRequired,
 	userData: PropTypes.object.isRequired
 }
@@ -190,7 +217,7 @@ const mapStateToProps = state => {
 };
 
 const mapDispatchToProps = dispatch => ({
-	validateLogin: () => dispatch(loginAction.login({"username":"amjad","password":"123abc"}))
+	validateSignup: () => dispatch(regiserAction.register({mobile:"amjad",password:"123abc"}))
 })
 
 export default connect(mapStateToProps,mapDispatchToProps)(SignUpScreen)

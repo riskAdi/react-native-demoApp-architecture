@@ -1,4 +1,5 @@
     
 import loginAction from './login'
-export { loginAction}
+import regiserAction from './register'
+export { loginAction,regiserAction}
 

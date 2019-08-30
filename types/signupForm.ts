@@ -10,7 +10,7 @@ export class SignupForm {
     @MaxLength(20)
     password: string;
 
-    @MinLength(2)
+    @MinLength(1)
     @MaxLength(5)
     country: string;
 }
