@@ -65,6 +65,11 @@ class SignUpScreen extends React.Component<Props, State> {
 		const obj = newProps
 		const error = (obj.error == undefined) ? false : obj.error
 		this.setState({ error: error,pressSubmit:false }, async () => {  await this.makeDefaultState()});
+
+		if(error === false){
+
+			this.props.navigation.navigate('Dashboard');
+		}
 	}
 
 	delay(ms: number) {

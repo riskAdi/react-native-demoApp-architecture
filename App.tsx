@@ -1,6 +1,7 @@
 import React from 'react';
 import LoginScreen from './screens/LoginScreen';
 import SignUpScreen from './screens/SignUpScreen';
+import DashboardScreen from './screens/DashboardScreen';
 import PopupListScreen from './screens/PopupListScreen';
 import {Platform} from 'react-native';
 import AuthLoadingScreen from './screens/AuthLoadingScreen'
@@ -19,14 +20,23 @@ if (process.env.NODE_ENV !== 'production') {
 }
 
 const AppStack = createStackNavigator(
-	{ Login: LoginScreen, 
+	{ 	Login: LoginScreen, 
 		SignUp:SignUpScreen
 	},
 	{
 		initialRouteName: 'Login',
 		transitionConfig: () => { return Platform.OS == 'android' ? fromRight(500): null}
 	}
-	);
+);
+
+const DasboardStack = createStackNavigator(
+	{ 	Dashboard: DashboardScreen
+	},
+	{
+		initialRouteName: 'Dashboard',
+		transitionConfig: () => { return Platform.OS == 'android' ? fromRight(500): null}
+	}
+);
 
 const AppModalStack = createStackNavigator(
 	{
@@ -45,7 +55,8 @@ const AppContainer = createAppContainer(
 	createSwitchNavigator(
 	{
 		AuthLoading: AuthLoadingScreen,
-		App: AppModalStack
+		App: AppModalStack,
+		Dashboard: DasboardStack
 	},
 	{
 		initialRouteName: 'AuthLoading'
