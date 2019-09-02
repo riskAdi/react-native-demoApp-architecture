@@ -1,7 +1,7 @@
 
 import React from 'react';
 import { FlatList, View } from 'react-native';
-import { ListItem,Button } from 'react-native-elements'
+import { ListItem,Button } from 'react-native-elements';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import  countryList from "../assets/countryList.json";
 import { ScreenContainer,InputHOCComp } from '../hoc';

@@ -2,7 +2,7 @@
 import React from 'react';
 //import LayoutTester from "react-native-device-screen-switcher";
 import { NormalText } from '../styles/style'
-import { View, Image, Text } from 'react-native';
+import { View, Image, Text,AsyncStorage } from 'react-native';
 import {normalize,validateForm} from '../utils'
 import { connect } from 'react-redux'
 import Icon from 'react-native-vector-icons/FontAwesome';
@@ -63,14 +63,14 @@ class LoginScreen extends React.Component<Props, State> {
 
 		if(obj.isLoggedIn){
 
-			/*try {
+			try {
 				await AsyncStorage.setItem(SESSION.EMAIL, this.username)
 			} catch (e) {
 				
 				console.log('-----------------error-------------------')
 				console.log(e)
 				console.log('-----------------error-------------------')
-			}*/
+			}
 
 		}
 	}

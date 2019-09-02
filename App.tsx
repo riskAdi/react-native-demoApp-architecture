@@ -5,6 +5,7 @@ import DashboardScreen from './screens/DashboardScreen';
 import PopupListScreen from './screens/PopupListScreen';
 import {Platform} from 'react-native';
 import AuthLoadingScreen from './screens/AuthLoadingScreen'
+
 import rootReducer from './reducers'
 import { createStore, applyMiddleware } from 'redux'
 import { Provider } from 'react-redux'
