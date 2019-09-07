@@ -46,6 +46,7 @@ const ContainerScreen = ScreenContainer()
 			chevron
 			bottomDivider = {true}
 			onPress = {()=>{ this.SelectedItem(item) }}
+			
 		/>
 	)
 

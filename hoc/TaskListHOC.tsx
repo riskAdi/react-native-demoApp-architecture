@@ -2,11 +2,36 @@ import React from 'react';
 import PropTypes, { object, string, func } from 'prop-types'
 import { FlatList, View } from 'react-native';
 import { ListItem } from 'react-native-elements'
+import { ScreenContainer } from '../hoc';
 
 	class TaskListHOCComp extends React.Component<any,{}> {
 
-		constructor(prop){
-			super(prop);
+        
+		constructor(props) {
+            super(props);
+        
+            this.state = {
+              loading: false,
+              data: [],
+              error: null,
+            };
+        }
+
+        componentWillMount(){
+
+            this.setState({
+                data: [{
+                    name: 'Amy Farha',
+                    subtitle: 'Vice President'
+                  },
+                  {
+                    name: 'Chris Jackson',
+                    avatar_url: 'https://s3.amazonaws.com/uifaces/faces/twitter/adhamdannaway/128.jpg',
+                    subtitle: 'Vice Chairman'
+                  }],
+                error:  null,
+                loading: false,
+              });
         }
         
         SelectedItem = (item) => {
@@ -17,32 +42,41 @@ import { ListItem } from 'react-native-elements'
 
             console.log("GetSelected");
         }
-        renderItem = ({ item }) => (
+        keyExtractor = (item, index) => index.toString()
+        renderItem = ({ item }) => 
+        {
+
+            console.log('-------item--------');
+            console.log(item.name);
+            console.log('-------item--------');
+
+        return (
             <ListItem
-                title={item.name}
-                rightTitle={item.dial_code}
-                chevronColor="black"
-                chevron
-                bottomDivider = {true}
-                onPress = {()=>{ this.SelectedItem(item) }}
-            />
+    title= {item.name}
+    subtitle={item.subtitle}
+    leftAvatar={{
+      source: item.avatar_url && { uri: item.avatar_url },
+      title: item.name[0]
+    }}
+  />
         )
+        }
 
 		render() {
 			
 			return (
-                <View>
+                
                 <FlatList
-                keyExtractor={item =>  item.dial_code + item.code}
+                keyExtractor={this.keyExtractor}
                 data={this.state.data}
-                renderItem={this.renderItem}
-                /></View>);
+                renderItem={this.renderItem}/>
+                );
 		}
     }
     
     TaskListHOCComp.propTypes = {
-        endPoint: string.isRequired,
-        didTapOnItem:func.isRequired
+       // endPoint: string.isRequired,
+       // didTapOnItem:func.isRequired
       };
 
 	

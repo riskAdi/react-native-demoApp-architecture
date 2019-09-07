@@ -1,6 +1,7 @@
 import React from 'react';
 import LoginScreen from './screens/LoginScreen';
 import SignUpScreen from './screens/SignUpScreen';
+import TaskScreen from './screens/NewTasksScreen';
 import DashboardScreen from './screens/DashboardScreen';
 import PopupListScreen from './screens/PopupListScreen';
 import {Platform} from 'react-native';
@@ -11,7 +12,7 @@ import { createStore, applyMiddleware } from 'redux'
 import { Provider } from 'react-redux'
 import thunk from 'redux-thunk'
 import { createLogger } from 'redux-logger'
-import { createAppContainer, createStackNavigator,createSwitchNavigator } from 'react-navigation';
+import { createAppContainer, createStackNavigator,createSwitchNavigator,create } from 'react-navigation';
 import { zoomIn, zoomOut, fromRight } from 'react-navigation-transitions'
 
 
@@ -35,6 +36,10 @@ const DasboardStack = createStackNavigator(
 	},
 	{
 		initialRouteName: 'Dashboard',
+		
+		defaultNavigationOptions: {
+			header: null
+		},
 		transitionConfig: () => { return Platform.OS == 'android' ? fromRight(500): null}
 	}
 );
@@ -55,9 +60,9 @@ const AppModalStack = createStackNavigator(
 const AppContainer = createAppContainer(
 	createSwitchNavigator(
 	{
-		AuthLoading: AuthLoadingScreen,
-		App: AppModalStack,
-		Dashboard: DasboardStack
+		AuthLoading:{ screen:AuthLoadingScreen},
+		App: {screen:AppModalStack},
+		Dashboard:{screen:DasboardStack}
 	},
 	{
 		initialRouteName: 'AuthLoading'
