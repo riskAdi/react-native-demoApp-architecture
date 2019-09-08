@@ -3,13 +3,21 @@ import { Text, View,SafeAreaView } from 'react-native';
 import { createAppContainer,createMaterialTopTabNavigator,createBottomTabNavigator } from 'react-navigation';
 import NewTaskScreen from './NewTasksScreen'
 
+import {
+  Menu,
+  MenuOptions,
+  MenuOption,
+  MenuTrigger,
+} from 'react-native-popup-menu';
+
 class SettingsScreen extends React.Component {
   render() {
     return (
      
-      <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-        <Text>Settings!</Text>
-      </View>
+      <View>
+    <Text>Hello world!</Text>
+    
+  </View>
      
     );
   }
