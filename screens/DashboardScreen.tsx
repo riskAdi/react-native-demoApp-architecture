@@ -15,7 +15,7 @@ class SettingsScreen extends React.Component {
     return (
      
       <View>
-    <Text>Hello world!</Text>
+    <Text>Settings</Text>
     
   </View>
      
@@ -37,7 +37,7 @@ const TabNavigator = createMaterialTopTabNavigator({
       inactiveTintColor: '#000000',
       showIcon:true,
       style: {
-        backgroundColor: '#FFFFFF',
+        backgroundColor: '#FFFFFF'
       },
       labelStyle: {
         textAlign: 'center',

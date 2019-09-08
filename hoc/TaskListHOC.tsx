@@ -34,21 +34,10 @@ import { ScreenContainer } from '../hoc';
               });
         }
         
-        SelectedItem = (item) => {
-		
-            //let callback = this.props.navigation.getParam('callback');
-            //callback(item);
-            //this.props.navigation.goBack();
-
-            console.log("GetSelected");
-        }
+        SelectedItem = (item) => {}
         keyExtractor = (item, index) => index.toString()
         renderItem = ({ item }) => 
         {
-
-            console.log('-------item--------');
-            console.log(item.name);
-            console.log('-------item--------');
 
         return (
             <ListItem
@@ -66,11 +55,11 @@ import { ScreenContainer } from '../hoc';
 			
 			return (
                 
-                <FlatList
-                keyExtractor={this.keyExtractor}
-                data={this.state.data}
-                renderItem={this.renderItem}/>
-                );
+          <FlatList
+            keyExtractor={this.keyExtractor}
+            data={this.state.data}
+            renderItem={this.renderItem}/>
+          );
 		}
     }
     
