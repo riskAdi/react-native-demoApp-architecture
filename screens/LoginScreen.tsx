@@ -64,14 +64,15 @@ class LoginScreen extends React.Component<Props, State> {
 		if(obj.isLoggedIn){
 
 			try {
-				await AsyncStorage.setItem(SESSION.EMAIL, this.username)
+				await AsyncStorage.setItem(SESSION.PHONE, this.username)
+				this.props.navigation.navigate('Dashboard');
+
 			} catch (e) {
 				
-				console.log('-----------------error-------------------')
-				console.log(e)
-				console.log('-----------------error-------------------')
+				//console.log('-----------------error-------------------')
+				//console.log(e)
+				//console.log('-----------------error-------------------')
 			}
-
 		}
 	}
 
@@ -153,6 +154,7 @@ class LoginScreen extends React.Component<Props, State> {
 					/>
 					<InputHOCComp ref={node => this.inputPassword = node} containerStyle={{marginTop:normalize(20)}} inputStyle = {{textAlign:'center'}}
 						placeholder='Your Password'
+						secureTextEntry={true} 
 						leftIcon={
 							<Icon
 								name='lock'

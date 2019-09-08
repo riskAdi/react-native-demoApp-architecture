@@ -11,6 +11,9 @@ enum RegisterActions {
 }
 enum SESSION {
     TOKEN = 'token',
-    EMAIL = 'email'
+    EMAIL = 'email',
+    PHONE = 'phone',
+    PASSWORD = 'password',
+    COUNTRY = 'country'
 }
 export {LoginActions,SESSION,RegisterActions};

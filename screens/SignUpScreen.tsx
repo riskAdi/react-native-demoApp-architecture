@@ -77,8 +77,6 @@ class SignUpScreen extends React.Component<Props, State> {
 	} 
 
 	async makeDefaultState(){
-
-		console.log("-------------------makeDefaultState----------------------");
 		this.setState({ error: false,pressSubmit:false });
 	}
 	async submitForm(){
@@ -167,6 +165,7 @@ class SignUpScreen extends React.Component<Props, State> {
 					/>
 					<InputHOCComp  containerStyle={{marginTop:normalize(20)}} inputStyle = {{textAlign:'center'}}
 						placeholder='Your Password'
+						secureTextEntry={true} 
 						leftIcon={
 							<Icon
 								name='lock'

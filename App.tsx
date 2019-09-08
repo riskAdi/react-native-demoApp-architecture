@@ -1,13 +1,11 @@
 import React from 'react';
 import LoginScreen from './screens/LoginScreen';
 import SignUpScreen from './screens/SignUpScreen';
-import TaskScreen from './screens/NewTasksScreen';
 import DashboardScreen from './screens/DashboardScreen';
 import PopupListScreen from './screens/PopupListScreen';
 import {Platform,TouchableOpacity,Text,View} from 'react-native';
 import AuthLoadingScreen from './screens/AuthLoadingScreen'
 import { Header } from 'react-native-elements';
-import LinearGradient from 'react-native-linear-gradient';
 import rootReducer from './reducers'
 import { createStore, applyMiddleware } from 'redux'
 import { Provider } from 'react-redux'
@@ -15,8 +13,7 @@ import thunk from 'redux-thunk'
 import Icon from 'react-native-vector-icons/FontAwesome';
 import { createLogger } from 'redux-logger'
 import { createAppContainer, createStackNavigator,createSwitchNavigator } from 'react-navigation';
-import { zoomIn, zoomOut, fromRight } from 'react-navigation-transitions'
-import { NavigationActions } from 'react-navigation';
+import {  fromRight } from 'react-navigation-transitions'
 import { AsyncStorage } from 'react-native';
 import { SESSION } from './config';
 
@@ -45,13 +42,13 @@ const AppStack = createStackNavigator(
 
 const Openner = (props) => (
 	<TouchableOpacity 
-	  onPress={() => props.ctx.menuActions.openMenu('menu-1')}>
+	  onPress={() => props.ctx.menuActions.openMenu('navContextMenu')}>
 	  <Icon
 								name='ellipsis-h'
 								size={normalize(24)}
 								color='white'
 							/>
-	  <Menu>
+	  <Menu name="navContextMenu">
       <MenuTrigger text='' />
 	  <MenuOptions style={{padding:normalize(10),paddingLeft:normalize(5)}}>
 	  
@@ -67,11 +64,10 @@ const Openner = (props) => (
 		<MenuOption 
 			onSelect={ async () =>{ 
 				
-				 await AsyncStorage.removeItem(SESSION.EMAIL)
+				await AsyncStorage.removeItem(SESSION.PHONE)
 				_navigator._navigation.navigate('App')
 		}}
 		 >
-
 			<View style={{height:normalize(15),flexDirection:'row', flexWrap:'wrap'}}>
 			<Icon style={{height:normalize(15)}} name='sign-out' size={normalize(15)} color='black' />
 			<Text style={{height:normalize(15),paddingLeft: normalize(5)}}>Sign out</Text>
